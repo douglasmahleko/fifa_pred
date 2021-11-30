@@ -25,7 +25,7 @@ def player_prediction(arr):
     to_array = np.asarray(arr)
     arr_reshape = to_array.reshape(1, -1)
     predic = loaded_model.predict(arr_reshape)
-    print(predic)
+    return predic
     
 def main():
     st.title("fifa player rating prediction")
@@ -89,13 +89,13 @@ def main():
         if type(to_array[i].iloc[0]) == str:
             to_array[i],_ = pd.factorize(to_array[i])
     to_array.fillna(0)
-  #  results = player_prediction(to_array)
-    print(to_array)
-#    print(results)
+    results = player_prediction(to_array)
+ #   print(to_array)
+    print(results)
     if st.button("predictionResults"):
-        results = player_prediction(to_array)
-        
-    st.success(results)
+       # results = player_prediction(to_array)    
+        st.success(results)
+    
     st.write("the score is \t", r2, "\nthe mean absolute error is \t", mean_ab)
     st.write('the mean squared error is\t', mean_sq,'\nthe roo mean error \t', r_mean)
 if __name__ == '__main__':
