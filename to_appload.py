@@ -22,13 +22,6 @@ mean_sq= mean_squared_error(Ytest, predict_from_load)
 r_mean = np.sqrt(mean_sq)
 
 def player_prediction(arr):
-    encode = LabelEncoder()
-    for i in range (len(arr)):
-        if type(arr[i]) == int:
-            pass
-        elif type(arr[i]) == float:
-            pass
-        arr[i] = encode.fit_transform(arr[i])
     to_array = np.asarray(arr)
     arr_reshape = to_array.reshape(1, -1)
     predic = loaded_model.predict(arr_reshape)
@@ -85,12 +78,22 @@ def main():
     lcb = st.text_input("lcb of players")
 
     results = ''
-    var = [age, height_cm, weight_kg, club, player_positions, preferred_foot, international_reputation, weak_foot, skill_moves, work_rate, player_tags, team_position, nation_position, pace, defending, gk_diving, player_traits, attacking_crossing, attacking_finishing, attacking_heading_accuracy, attacking_short_passing, attacking_volleys, skill_dribbling, skill_curve, skill_fk_accuracy, skill_long_passing, skill_ball_control, movement_acceleration, movement_sprint_speed, movement_agility, movement_reactions, movement_balance, power_shot_power, power_jumping, power_stamina, power_strength, power_long_shots, mentality_aggression, mentality_interceptions, mentality_positioning, mentality_vision, mentality_penalties, defending_marking, defending_standing_tackle, defending_sliding_tackle, ls, lw, lam, lcb]
+    pos = [1]
+    var = [age, player_positions, preferred_foot, international_reputation, weak_foot, skill_moves, work_rate, player_tags, team_position, nation_position, pace, defending, gk_diving, player_traits, attacking_crossing, attacking_finishing, attacking_heading_accuracy, attacking_short_passing, attacking_volleys, skill_dribbling, skill_curve, skill_fk_accuracy, skill_long_passing, skill_ball_control, movement_acceleration, movement_sprint_speed, movement_agility, movement_reactions, movement_balance, power_shot_power, power_jumping, power_stamina, power_strength, power_long_shots, mentality_aggression, mentality_interceptions, mentality_positioning, mentality_vision, mentality_penalties, defending_marking, defending_standing_tackle, defending_sliding_tackle, ls, lw, lam, lcb]
     for i in var:
         if i == "":
             i = 'nothing'
+    values = {'age': [age], 'player_positions': [player_positions],'preferred_foot': [preferred_foot],'international_reputation': [international_reputation],'weak_foot': [weak_foot],'skill_moves': [skill_moves],'work_rate': [work_rate],'player_tags': [player_tags], 'team_position': [team_position],'nation_position': [nation_position],'pace': [pace],'defending': [defending],'gk_diving': [gk_diving],'player_traits': [player_traits],'attacking_crossing': [attacking_crossing],'attacking_finishing': [attacking_finishing],'attacking_heading_accuracy': [attacking_heading_accuracy],'attacking_short_passing': [attacking_short_passing],'attacking_volleys': [attacking_volleys],'skill_dribbling': [skill_dribbling],'skill_curve': [skill_curve],'skill_fk_accuracy': [skill_fk_accuracy],'skill_long_passing': [skill_long_passing],'skill_ball_control': [skill_ball_control],'movement_acceleration': [movement_acceleration],'movement_sprint_speed': [movement_sprint_speed],'movement_agility': [movement_agility],'movement_reactions': [ movement_reactions],'movement_balance': [ movement_balance],'power_shot_power': [ power_shot_power],'power_jumping': [ power_jumping],'power_stamina': [ power_stamina],'power_strength': [power_strength],'power_long_shots': [ power_long_shots],'mentality_aggression': [ mentality_aggression],'mentality_interceptions': [ mentality_interceptions],'mentality_positioning': [ mentality_positioning],'mentality_vision': [ mentality_vision], 'mentality_penalties': [ mentality_penalties],'defending_marking': [ defending_marking],'defending_standing_tackle': [ defending_standing_tackle],'defending_sliding_tackle': [ defending_sliding_tackle],'ls': [ls],'lw': [ lw],'lam': [ lam],'lcb': [ lcb]}
+    to_array = pd.DataFrame(values, index = pos)
+    for i in to_array.columns:
+        if type(to_array[i].iloc[0]) == str:
+            to_array[i],_ = pd.factorize(to_array[i])
+    to_array.fillna(0)
+  #  results = player_prediction(to_array)
+    print(to_array)
+#    print(results)
     if st.button("predictionResults"):
-        results = player_prediction(var)
+        results = player_prediction(to_array)
         
     st.success(results)
     st.write("the score is \t", r2, "\nthe mean absolute error is \t", mean_ab)
